@@ -19,4 +19,7 @@ Installation from source
 
 Notice
 ------
+This is Alpha software. 
+
+By continuing to use this software you agree CriticalNix is not responsible for your actions or losses!
 
