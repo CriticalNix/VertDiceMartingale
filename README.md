@@ -4,6 +4,8 @@ Vert-dice.com Bet bot
 This is a chrome extension that provides various enhancements for vert-dice.com. Specifically, creates the ability to use the [martingale betting strategy](http://en.wikipedia.org/wiki/Martingale_(betting_system\)) directly from the browser.
 
 
+![ScreenShot](https://raw.githubusercontent.com/CriticalNix/Snippets/master/IMAGES/vert-dice.jpg)
+
 ------------
 Installation
 ------------
