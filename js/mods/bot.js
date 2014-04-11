@@ -18,14 +18,17 @@ var start_bank = 0;
 var balance_now = 0;
 var delayed = 0;
 var start_check = 0;
+var profit_now = 0;
 
 var running = 0;
 
 function heart_beat() {
 	gui();
 	load_delay();
+	console.log(start_bank);
 
 	setInterval(function () {
+
 		bet_click();
 
 	}, 100);
@@ -113,7 +116,6 @@ function max_win_streak() { //longest win streak
 function load_delay() {
 	setTimeout(function () {
 		delayed = 1;
-		start_bank = parseFloat($("#balance").html());
 
 	}, 1500);
 }
@@ -135,22 +137,33 @@ function bust() {
 	$("#BetAmount").val(reset_bet);
 }
 
+socket.on('sysMsg', function (data) {
+	console.log(data.Content);
+});
+
 socket.on("betResult", function (data) {
 
 	if (delayed == 1) {
 		total_bets++;
 	}
 
+	if (start_check == 0) {
+		start_bank = parseFloat($("#balance").html());
+
+		start_check = 1;
+		console.log('Found start balance... ' + start_bank);
+
+	}
+
 	balance_now = parseFloat($("#balance").html());
 
-	var profit_now = balance_now - start_bank;
+	profit_now = balance_now - start_bank;
 
-	var x = tidy(profit_now);
+	profit_now = tidy(profit_now);
 
-
-	$("#profitInput").val(x);
+	$("#profitInput").val(profit_now);
 	$("#betsInput").val(total_bets);
-	
+
 	if (data.STATUS == "WIN") {
 		console.clear();
 		marti_current_bet = reset_bet;
@@ -159,7 +172,7 @@ socket.on("betResult", function (data) {
 		console.log('bet: ' + data.Amount);
 		console.log('chance: ' + data.Target);
 		console.log('lucky: ' + data.Num);
-		console.log('profit_now: ' + x);
+		console.log('profit_now: ' + profit_now);
 
 		reset_steps = 0;
 		betting = 0;
@@ -186,7 +199,7 @@ socket.on("betResult", function (data) {
 		console.log('bet: ' + data.Amount);
 		console.log('chance: ' + data.Target);
 		console.log('lucky: ' + data.Num);
-		console.log('profit_now: ' + x);
+		console.log('profit_now: ' + profit_now);
 
 		betting = 0;
 		loss_streak++;
@@ -261,6 +274,10 @@ function generate_bar_graph() {
 	}
 
 	return res;
+}
+
+function init_keybindings(chatinput) {
+	//console.log('Keybindings disabled');
 }
 
 //--------------------------------------- Local storage functions
@@ -561,7 +578,6 @@ function gui() {
 	$containerg.append($graphDiv);
 	$button_group.append($legends);
 	$containerg.append($graphDiv2);
-
 	
 	$show_bot = $('<button title="Toggles bot option gui" class="btn btn-small bet_btn" style="margin-right:10px;border:1px solid" id="show_bot" href="#">Bot</button>');
 	  
